@@ -28,14 +28,8 @@
             }
         },
         methods: {
-            clearPanier(){
-                let url = 'cart';
-                axiosWrapper.delete(url).then(resp => {
-                    this.$props.panier = [];
-                    console.log(resp);
-                }).catch(err => {
-                    console.log(err);
-                });
+            clearPanier() {
+                this.$emit('update:clear-panier');
             }
         },
         watch: {

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <Panier :panier="panier"></Panier>
-        <item-product v-for="item in products" :item="item" :panier="panier"></item-product>
+        <Panier v-on:update:clear-panier="clearPanier" :panier="panier"></Panier>
+        <item-product v-for="item in products" :item="item" :key="item.id" :panier="panier" v-on:update:panier="addToPanier"></item-product>
     </div>
 </template>
 
@@ -81,8 +81,26 @@ export default {
         loadPanier(){
             let url = 'cart';
             axiosWrapper.get(url).then(resp => {
-                console.log(resp);
                 this.panier = resp.data === null ? [] : resp.data;
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        addToPanier(item){
+            let url = 'cart/' + item.id;
+            axiosWrapper.post(url).then(resp => {
+                this.panier = resp.data;
+                // console.log(resp);
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        clearPanier(){
+            console.log("clear");
+            let url = 'cart';
+            axiosWrapper.delete(url).then(resp => {
+                this.panier = [];
+                console.log(resp);
             }).catch(err => {
                 console.log(err);
             });

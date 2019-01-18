@@ -80,14 +80,7 @@
         },
         methods: {
             addToPanier() {
-                let item = this.$props.item;
-                let url = 'cart/' + item.id;
-                axiosWrapper.post(url).then(resp => {
-                    this.$props.panier = resp.data;
-                }).catch(err => {
-                    console.log(err);
-                });
-                // return this.$props.panier.push(this.$props.item);
+                this.$emit('update:panier', this.$props.item);
             }
         }
     }
