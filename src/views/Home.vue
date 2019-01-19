@@ -1,18 +1,69 @@
 <template>
     <div class="container">
-        <Panier v-on:update:clear-panier="clearPanier" :panier="panier"></Panier>
-        <item-product v-for="item in products" :item="item" :key="item.id" :panier="panier" v-on:update:panier="addToPanier"></item-product>
+        <panier v-on:update:clear-panier="clearPanier" :panier="panier"></panier>
+        <products v-on:update:panier="addToPanier" :panier="panier" :products="products"></products>
     </div>
 </template>
 
-<style lang="scss">
-    .container{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        /*justify-content: flex-start;*/
-        /*align-items: stretch;*/
+<script>
+import Products from "@/components/Products";
+import Panier from "@/components/Panier";
+
+import axiosWrapper from "@/modules/axiosWrapper";
+
+export default {
+    name: 'home',
+    components: {Products, Panier},
+    data() {
+        return {
+            page: 1,
+            field: 'nom',
+            sort: 'asc',
+            panier: [],
+            products: []
+        }
+    },
+    methods: {
+        loadProducts() {
+            let url = 'products?page=' + this.page + '&sort=' + this.sort + '&field=' + this.field;
+            axiosWrapper.get(url).then(response => {
+                this.products = response.data;
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        loadPanier(){
+            let url = 'cart';
+            axiosWrapper.get(url).then(resp => {
+                this.panier = resp.data === null ? [] : resp.data;
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        addToPanier(item){
+            let url = 'cart/' + item.id;
+            axiosWrapper.post(url).then(resp => {
+                this.panier = resp.data;
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        clearPanier(){
+            let url = 'cart';
+            axiosWrapper.delete(url).then(resp => {
+                this.panier = [];
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    },
+    mounted() {
+        this.loadProducts();
+        this.loadPanier();
     }
+}
+</script>
+<style lang="scss">
     button {
         overflow: hidden;
         position: relative;
@@ -47,68 +98,12 @@
         &:hover::before{
             top: 0;
         }
+
+        &.black{
+            background-color: #1b1b1b;
+            &::before{
+                background-color: lighten(#000, 30%);
+            }
+        }
     }
 </style>
-<script>
-// @ is an alias to /src
-
-import axiosWrapper from "@/modules/axiosWrapper";
-import ItemProduct from "@/components/ItemProduct";
-import Panier from "@/components/Panier";
-
-
-export default {
-    name: 'home',
-    components: {ItemProduct, Panier},
-    data() {
-        return {
-            page: 1,
-            field: 'nom',
-            sort: 'asc',
-            panier: [],
-            products: []
-        }
-    },
-    methods: {
-        loadProducts() {
-            let url = 'products?page=' + this.page + '&sort=' + this.sort + '&field=' + this.field;
-            axiosWrapper.get(url).then(response => {
-                this.products = response.data;
-            }).catch(err => {
-                console.log(err);
-            });
-        },
-        loadPanier(){
-            let url = 'cart';
-            axiosWrapper.get(url).then(resp => {
-                this.panier = resp.data === null ? [] : resp.data;
-            }).catch(err => {
-                console.log(err);
-            });
-        },
-        addToPanier(item){
-            let url = 'cart/' + item.id;
-            axiosWrapper.post(url).then(resp => {
-                this.panier = resp.data;
-                // console.log(resp);
-            }).catch(err => {
-                console.log(err);
-            });
-        },
-        clearPanier(){
-            console.log("clear");
-            let url = 'cart';
-            axiosWrapper.delete(url).then(resp => {
-                this.panier = [];
-                console.log(resp);
-            }).catch(err => {
-                console.log(err);
-            });
-        }
-    },
-    mounted() {
-        this.loadProducts();
-        this.loadPanier();
-    }
-}
-</script>
