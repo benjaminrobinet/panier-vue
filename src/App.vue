@@ -5,6 +5,10 @@
 </template>
 
 <style lang="scss">
+    body, html{
+        position: relative;
+        min-height: 100%;
+    }
     body{
         margin: 0;
         padding: 0;
@@ -13,7 +17,7 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
+        color: #2f2f2f;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;

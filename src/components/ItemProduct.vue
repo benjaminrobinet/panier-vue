@@ -20,7 +20,7 @@
 
 <style scoped lang="scss">
     .product-wrapper {
-        width: 33.33vw;
+        width: 33.33%;
     }
     .product{
         display: flex;
@@ -33,8 +33,8 @@
 
         .img-wrapper{
             position: relative;
-            width: 33.33vw;
-            height: 33.33vw;
+            width: 100%;
+            padding-bottom: 100%;
             overflow: hidden;
             background-color: #fff;
 

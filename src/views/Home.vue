@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <panier v-on:update:clear-panier="clearPanier" :panier="panier"></panier>
-        <products v-on:update:panier="addToPanier" :panier="panier" :products="products"></products>
+        <products v-on:update:panier="addToPanier" v-on:next-page="nextPage" v-on:prev-page="prevPage" :page="page" :panier="panier" :products="products"></products>
     </div>
 </template>
 
@@ -55,6 +55,31 @@ export default {
             }).catch(err => {
                 console.log(err);
             });
+        },
+        nextPage(){
+            let url = 'products?page=' + (this.page + 1) + '&sort=' + this.sort + '&field=' + this.field;
+            axiosWrapper.get(url).then(response => {
+                if(response.data.length > 0){
+                    this.page += 1;
+                    this.products = response.data;
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        prevPage(){
+            if(this.page <= 1){
+                return;
+            }
+            let url = 'products?page=' + (this.page - 1) + '&sort=' + this.sort + '&field=' + this.field;
+            axiosWrapper.get(url).then(response => {
+                if(response.data.length > 0){
+                    this.page -= 1;
+                    this.products = response.data;
+                }
+            }).catch(err => {
+                console.log(err);
+            });
         }
     },
     mounted() {
@@ -64,6 +89,10 @@ export default {
 }
 </script>
 <style lang="scss">
+    .container{
+        position: relative;
+        min-height: 100%;
+    }
     button {
         overflow: hidden;
         position: relative;

@@ -12,7 +12,7 @@
             </ul>
         </div>
         <div class="buttons-wrapper">
-            <button v-on:click="clearPanier"><span>Vider le panier</span></button>
+            <button v-on:click="$emit('update:clear-panier')"><span>Vider le panier</span></button>
             <button v-on:click=""><span>Commander</span></button>
         </div>
     </div>
@@ -29,11 +29,7 @@
                 togglePanier: false
             }
         },
-        methods: {
-            clearPanier() {
-                this.$emit('update:clear-panier');
-            }
-        },
+        methods: {},
         computed: {
             panierCount(){
                 return this.$props.panier.reduce((accu, cval) => {
@@ -47,7 +43,8 @@
                 const { bar1, bar2, bar3, panier } = this.$refs;
                 let tl = new TimelineMax();
 
-                document.body.style.overflow = (show) ? 'hidden' : '';
+                // document.body.style.overflow = (show) ? 'hidden' : '';
+
                 if(show){
                     tl.to(bar1, 0.2, {css: {transform: "translateY(-50%) rotate(45deg)", top: "50%"}, ease: Power4.easeOut, force3D: true}, 0);
                     tl.to(bar2, 0.2, {css: {left: "-100%", opacity: 0}, ease: Linear.easeNone, force3D: true}, 0);
@@ -68,7 +65,7 @@
 
 <style scoped lang="scss">
     .panier{
-        min-height: 100vh;
+        height: 100%;
         width: 50%;
         position: fixed;
         top: 0;
@@ -80,8 +77,7 @@
     .content{
         color: #fff;
         padding: 60px 0;
-        max-height: 100vh;
-        overflow-y: scroll;
+        min-height: 100%;
     }
     .buttons-wrapper{
         position: absolute;
