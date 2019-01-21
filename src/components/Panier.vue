@@ -8,8 +8,12 @@
         </div>
         <div class="content" v-if="togglePanier">
             <ul>
-                <li v-for="item in panier">{{ item }}</li>
+                <li v-for="item in panier">{{ item.nom }}<br/>Quantité: {{ item.qte }} ({{ item.prix }}€)</li>
             </ul>
+            <div v-if="panier.length > 0" class="total">Total: {{ totalPrice }}€</div>
+            <div v-else>
+                <p>Votre panier est vide.</p>
+            </div>
         </div>
         <div class="buttons-wrapper">
             <button v-on:click="$emit('update:clear-panier')"><span>Vider le panier</span></button>
@@ -26,7 +30,7 @@
         props: ['panier'],
         data(){
             return {
-                togglePanier: false
+                togglePanier: false,
             }
         },
         methods: {},
@@ -37,13 +41,17 @@
                     return accu;
                 }, 0);
             },
+            totalPrice(){
+                return this.$props.panier.reduce((accu, cval) => {
+                    accu += cval.prix;
+                    return accu;
+                }, 0);
+            }
         },
         watch: {
             togglePanier: function(show){
                 const { bar1, bar2, bar3, panier } = this.$refs;
                 let tl = new TimelineMax();
-
-                // document.body.style.overflow = (show) ? 'hidden' : '';
 
                 if(show){
                     tl.to(bar1, 0.2, {css: {transform: "translateY(-50%) rotate(45deg)", top: "50%"}, ease: Power4.easeOut, force3D: true}, 0);
@@ -73,11 +81,20 @@
         min-width: 350px;
         background-color: rgba(0, 0, 0, 0.9);
         z-index: 99;
+
+        @include sm{
+            min-width: auto;
+            width: 100%;
+        }
     }
     .content{
         color: #fff;
-        padding: 60px 0;
+        padding: 60px 20px;
         min-height: 100%;
+
+        .total{
+            text-align: right;
+        }
     }
     .buttons-wrapper{
         position: absolute;

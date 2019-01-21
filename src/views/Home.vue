@@ -20,7 +20,8 @@ export default {
             field: 'nom',
             sort: 'asc',
             panier: [],
-            products: []
+            products: [],
+            waiting: false
         }
     },
     methods: {
@@ -57,26 +58,33 @@ export default {
             });
         },
         nextPage(){
+            if(this.waiting){
+                return;
+            }
+            this.waiting = true;
             let url = 'products?page=' + (this.page + 1) + '&sort=' + this.sort + '&field=' + this.field;
             axiosWrapper.get(url).then(response => {
                 if(response.data.length > 0){
                     this.page += 1;
                     this.products = response.data;
                 }
+                this.waiting = false;
             }).catch(err => {
                 console.log(err);
             });
         },
         prevPage(){
-            if(this.page <= 1){
+            if(this.page <= 1 || this.waiting){
                 return;
             }
+            this.waiting = true;
             let url = 'products?page=' + (this.page - 1) + '&sort=' + this.sort + '&field=' + this.field;
             axiosWrapper.get(url).then(response => {
                 if(response.data.length > 0){
                     this.page -= 1;
                     this.products = response.data;
                 }
+                this.waiting = false;
             }).catch(err => {
                 console.log(err);
             });

@@ -5,6 +5,8 @@
 </template>
 
 <style lang="scss">
+    @import "assets/style/scss/default";
+
     body, html{
         position: relative;
         min-height: 100%;

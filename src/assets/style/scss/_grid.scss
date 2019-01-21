@@ -1,0 +1,17 @@
+//$breakpoints: (mobile: 750, tablet-small: 768, tablet-large: 1366, desktop: 1920);
+
+@mixin sm{
+  @media screen and (max-width: 450px) {
+    @content;
+  }
+}
+@mixin md{
+  @media screen and (min-width: 451px) and (max-width: 1250px) {
+    @content;
+  }
+}
+@mixin lg{
+  @media screen and (min-width: 1251px) {
+    @content;
+  }
+}

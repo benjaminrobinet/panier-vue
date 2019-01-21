@@ -1,7 +1,9 @@
 <template>
     <div id="products">
-        <div class="products-wrapper">
-            <item-product v-for="item in products" :item="item" :key="item.id" :panier="panier"></item-product>
+        <div class="content">
+            <div class="products-wrapper">
+                <item-product v-for="item in products" :item="item" :key="item.id" :panier="panier"></item-product>
+            </div>
         </div>
         <div class="pagination">
             <div class="prev" v-on:click="prevPage">&lt;</div>
@@ -31,6 +33,11 @@
 
 <style scoped lang="scss">
     #products{
+        .content{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
         .products-wrapper{
             display: flex;
             flex-direction: row;
