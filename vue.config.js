@@ -2,7 +2,7 @@ module.exports = {
     productionSourceMap: true,
     css: {
         // extract CSS in components into a single CSS file (only in production)
-        extract: true,
+        extract: false,
 
         // enable CSS source maps?
         sourceMap: true,
